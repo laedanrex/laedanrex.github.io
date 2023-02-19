@@ -1,0 +1,85 @@
+# https://[api_domain]:[freebox_port]/[api_base_url]/v[major_api_version]/[api_url]
+# https://mafreebox.freebox.fr/[api_base_url]/v[major_api_version]/[api_url]
+
+### un appel
+# qsdqed
+GET / HTTP/1.1
+Host: {{url}}
+Accept: application/json
+
+{
+  "test: "test"
+}
+
+
+### /api_version
+GET /api_version HTTP/1.1
+Host: {{url}}
+Accept: application/json
+
+### 1 Request authorization
+POST /api/v4/login/authorize/ HTTP/1.1
+Host: {{url}}
+
+{
+   "app_id": "{{app_id}}",
+   "app_name": "Test App",
+   "app_version": "10.0",
+   "device_name": "{{device_name}}"
+}
+> {%
+    client.global.set("app_token", response.body.result.app_token);
+    client.global.set("track_id", response.body.result.track_id);
+%}
+
+### 2 Track authorization progress
+GET /api/v4/login/authorize/{{track_id}} HTTP/1.1
+Host: {{url}}
+
+> {%
+    client.global.set("status", response.body.result.status);
+    client.global.set("challenge", response.body.result.challenge);
+%}
+
+### 3 Getting the challenge value
+GET /api/v4/login/
+Host: {{url}}
+
+> {%
+    client.global.set("password_salt", response.body.result.password_salt);
+    client.global.set("challenge", response.body.result.challenge);
+%}
+
+### 4 Opening a session
+POST /api/v4/login/session/ HTTP/1.1
+Host: {{url}}
+
+{
+   "app_id": "{{app_id}}",
+   "password": "{{password}}"
+}
+
+### 5 Make an authenticated call to the API
+GET /api/v4/login/session/ HTTP/1.1
+Host: {{url}}
+X-Fbx-App-Auth: {{session_token}}"
+
+### 9 Closing the current session
+POST /api/v4/login/logout/ HTTP/1.1
+Host: {{url}}
+
+{
+   "app_id": "{{app_id}}",
+   "password": "y_3H8sRB5!JDFHF"
+}
+
+### II Get the current Samba configuration
+GET /api/v4/netshare/samba/ HTTP/1.1
+Host: mafreebox.freebox.fr
+
+#--- 2 File System Api -------------------------------------------------
+#--- 2.2 File Sharing Link ---------------------------------------------
+
+### Retrieve a File Sharing link
+GET /api/v4/share_link/ HTTP/1.1
+Host: mafreebox.freebox.fr

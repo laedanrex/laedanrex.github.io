@@ -1,0 +1,7 @@
+# https://[api_domain]:[freebox_port]/[api_base_url]/v[major_api_version]/[api_url]
+# https://mafreebox.freebox.fr/[api_base_url]/v[major_api_version]/[api_url]
+
+### list folders
+# qsdqed
+GET {{share-url}}
+
