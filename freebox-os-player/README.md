@@ -44,3 +44,40 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# CORS
+there are 6 ways to do this in React,
+
+number 1 and 2 and 3 are the best:
+
+1-config CORS in the Server-Side
+
+2-set headers manually like this:
+
+resonse_object.header("Access-Control-Allow-Origin", "*");
+resonse_object.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+3-config NGINX for proxy_pass which is explained here.
+
+4-bypass the Cross-Origin-Policy with chrom extension(only for development and not recommended !)
+
+5-bypass the cross-origin-policy with URL bellow(only for development)
+
+"https://cors-anywhere.herokuapp.com/{type_your_url_here}"
+6-use proxy in your package.json file:(only for development)
+
+if this is your API: http://45.456.200.5:7000/api/profile/
+
+add this part in your package.json file: "proxy": "http://45.456.200.5:7000/",
+
+and then make your request with the next parts of the api:
+
+React.useEffect(() => {
+axios
+.get('api/profile/')
+.then(function (response) {
+console.log(response);
+})
+.catch(function (error) {
+console.log(error);
+});
+});
