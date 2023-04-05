@@ -2,19 +2,26 @@ import React, {Component} from 'react';
 import './NavigationList.css';
 import NavigationItem from "./item/NavigationItem";
 import axios from "axios";
-import {Item} from "./item/item.interface";
+import {Item, ItemType} from "./item/item.interface";
+import {Link} from "react-router-dom";
 
 
 interface Props {
+  handleClick;
+  location;
 }
 
 interface State {
+  loaded: boolean;
+  totalReactPackages;
+  errorMessage;
+
 }
 
 export default class NavigationList extends Component<Props, State> {
 
-  shareUrl = 'http://88.170.27.234:47360/share/H1bHx3Q0FOdP31_i/';
-  shareUrlEnd = '/share/H1bHx3Q0FOdP31_i/';
+  shareUrl = 'http://88.170.27.234:47360/share/EabF5eSZFCG96ZyX/';
+  shareUrlEnd = '/share/V1uMAWXS_LvGBZVV/';
   itemList: Array<Item> = []
 
   constructor(props: Props) {
@@ -22,7 +29,10 @@ export default class NavigationList extends Component<Props, State> {
   }
 
   componentWillMount() {
-    this.getLinksAxios()
+    // TODO load only if first ?
+    console.log(this.props.location)
+    this.getItemsFromShare()
+    this.setState({loaded: true})
   }
 
   extractTYPE(item: Item, line: string) {
@@ -35,15 +45,15 @@ export default class NavigationList extends Component<Props, State> {
       // file-icon-sprite-default file-icon-image file-icon-image_jpeg
       // file-icon-sprite-default file-icon-video file-icon-video_mp
       if (item.classes.indexOf("file-icon-inode") > -1) {
-        item.type = "FOLDER"
+        item.type = ItemType.FOLDER
       } else if (item.classes.indexOf("file-icon-application") > -1) {
-        item.type = "OCTET_STREAM"
+        item.type = ItemType.OCTET_STREAM
       } else if (item.classes.indexOf("file-icon-text") > -1) {
-        item.type = "TEXT"
+        item.type = ItemType.TEXT
       } else if (item.classes.indexOf("file-icon-image") > -1) {
-        item.type = "IMAGE"
+        item.type = ItemType.IMAGE
       } else if (item.classes.indexOf("file-icon-video") > -1) {
-        item.type = "VIDEO"
+        item.type = ItemType.VIDEO
       }
     }
   }
@@ -71,9 +81,7 @@ export default class NavigationList extends Component<Props, State> {
   }
 
   extractDataFromLines(html: string) {
-    console.log('start extractDataFromLines');
     let data = html.split('\n');
-    console.log(data.length)
     for (let i = 0; i < data.length; i++) {
       let line = data[i];
       if (!line.startsWith('              <td>')) {
@@ -93,11 +101,11 @@ export default class NavigationList extends Component<Props, State> {
       this.extractDATE(item, data[i]);
       // -----------------------
       this.itemList.push(item);
-      console.log(JSON.stringify(item))
+      console.log(item)
     }
   }
 
-  getLinksAxios() {
+  getItemsFromShare() {
     // see proxy in package.json
     axios.get(this.shareUrlEnd)
       .then(response => {
@@ -106,24 +114,21 @@ export default class NavigationList extends Component<Props, State> {
       })
       .catch(error => {
         this.setState({errorMessage: error.message});
-        console.error('There was an error!', error);
+        console.error('There was an error while getting links!', error);
       });
-  }
-
-  c
-
-  clickOnItem(item: Item) {
-    console.log('clic on ' + JSON.stringify(item))
-
   }
 
   render() {
     return (
       <div className="NavigationList">
-        {this.itemList.map((listItem: Item) => (
-          <NavigationItem item={listItem} key={listItem.name}
-                          handleClick={this.clickOnItem}/>
-        ))}
+        <nav>
+          <Link to="/">ACCUEIL</Link>
+          {this.itemList.map((listItem: Item) => (
+            <NavigationItem item={listItem} key={listItem.name}
+                            handleClick={(item) => this.props.handleClick(item)}
+            />
+          ))}
+        </nav>
       </div>
     );
   }
