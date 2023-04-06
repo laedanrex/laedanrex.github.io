@@ -1,10 +1,6 @@
 .Player {
   text-align: center;
-  background-color: #0b46da;
+  justify-content: center;
+  background-color: #8292c0;
   border: 1px solid #0F1C53;
-}
-
-video {
-  width: 100%;
-  object-fit: fill;
 }

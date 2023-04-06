@@ -1,59 +1,56 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './NavigationItem.css';
 import {useLocation, useNavigate} from "react-router-dom";
-import {Item, ItemType} from "./item.interface";
+import {ItemType} from "../../common/ItemType.enum";
+import {Item} from "../../common/Item.interface";
 
 interface Props {
-  item: Item;
-  handleClick;
+  item: Item
 }
 
 interface State {
 }
 
-export default class NavigationItem extends Component<Props, State> {
+export default function NavigationItem(props: Props) {
 
-  constructor(props: Props) {
-    super(props)
-  }
+  let navigate = useNavigate() // extract navigation prop here
+  let location = useLocation();
 
-  getPath(pathname: string): string {
-    const item = this.props.item;
+  function getPath(): string {
+    const item = props.item;
     console.log('clic on ' + JSON.stringify(item))
+    let pathname = location.pathname
+    if (pathname.charAt(pathname.length - 1) == '/') {
+      pathname = pathname.substring(0, pathname.length - 1);
+    }
     switch (item.type) {
       case ItemType.FOLDER:
         return pathname + '/' + item.name
       case ItemType.TEXT:
-        return pathname + '?text=' + item.name
+        return pathname + '?' + ItemType.TEXT + '=' + item.name
       case ItemType.IMAGE:
-        return pathname + '?image=' + item.name
+        return pathname + '?' + ItemType.IMAGE + '=' + item.name
       case ItemType.VIDEO:
-        return pathname + '?video=' + item.name
+        return pathname + '?' + ItemType.VIDEO + '=' + item.name
       case ItemType.OCTET_STREAM:
-        return pathname + '?video=' + item.name
+        return pathname + '?' + ItemType.VIDEO + '=' + item.name
       default:
         console.error('Unkonw item type error :' + item.type)
         return pathname;
     }
   }
 
-  navigate = useNavigate();
-
-  routeChange = () => {
-    const location = useLocation();
-    let path = this.getPath(location.pathname);
+  function routeChange() {
+    let path = getPath();
     console.log('path = ' + path)
-    this.navigate(path);
+    navigate(path)
   }
 
   // <div className="NavigationItem" onClick={() => this.props.handleClick(this.props.item)}>
 
-  render() {
-    return (
-      <div className="NavigationItem" onClick={this.routeChange}>
-        {this.props.item.name}
-      </div>
-    );
-  }
-
+  return (
+    <div className="NavigationItem" onClick={routeChange}>
+      {props.item.name}
+    </div>
+  )
 }

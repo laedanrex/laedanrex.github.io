@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 import './NavigationList.css';
 import NavigationItem from "./item/NavigationItem";
 import axios from "axios";
-import {Item, ItemType} from "./item/item.interface";
 import {Link} from "react-router-dom";
+import {Item} from "../common/Item.interface";
+import {ItemType} from "../common/ItemType.enum";
 
 
 interface Props {
-  handleClick;
-  location;
 }
 
 interface State {
@@ -18,10 +17,14 @@ interface State {
 
 }
 
-export default class NavigationList extends Component<Props, State> {
+export default function NavigationList(props: Props) {
+  return <NavigationListComponent/> //pass to your component.
+}
+
+export class NavigationListComponent extends Component<Props, State> {
 
   shareUrl = 'http://88.170.27.234:47360/share/EabF5eSZFCG96ZyX/';
-  shareUrlEnd = '/share/V1uMAWXS_LvGBZVV/';
+  shareUrlEnd = '/share/EdOVgDcikGcJUvKU/';
   itemList: Array<Item> = []
 
   constructor(props: Props) {
@@ -30,7 +33,6 @@ export default class NavigationList extends Component<Props, State> {
 
   componentWillMount() {
     // TODO load only if first ?
-    console.log(this.props.location)
     this.getItemsFromShare()
     this.setState({loaded: true})
   }
@@ -105,6 +107,7 @@ export default class NavigationList extends Component<Props, State> {
     }
   }
 
+  //TODO add navigation end url
   getItemsFromShare() {
     // see proxy in package.json
     axios.get(this.shareUrlEnd)
@@ -123,10 +126,8 @@ export default class NavigationList extends Component<Props, State> {
       <div className="NavigationList">
         <nav>
           <Link to="/">ACCUEIL</Link>
-          {this.itemList.map((listItem: Item) => (
-            <NavigationItem item={listItem} key={listItem.name}
-                            handleClick={(item) => this.props.handleClick(item)}
-            />
+          {this.itemList.map((item: Item) => (
+            <NavigationItem item={item} key={item.name}/>
           ))}
         </nav>
       </div>
