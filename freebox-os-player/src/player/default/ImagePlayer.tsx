@@ -11,7 +11,7 @@ export default function DefaultPlayer(props: Props) {
 
   return (
     <div className="DefaultPlayer">
-      RIEN DU TOUT
+      RIEN DU TOUTS
     </div>
   );
 }

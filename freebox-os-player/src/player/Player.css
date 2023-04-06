@@ -1,6 +1,6 @@
 .Player {
   text-align: center;
   justify-content: center;
-  background-color: #8292c0;
-  border: 1px solid #0F1C53;
+  background-color: #ff0000;
+  flex: 1;
 }

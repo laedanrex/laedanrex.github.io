@@ -1,10 +1,5 @@
 .TextPlayer {
   text-align: center;
-  background-color: #0b46da;
-  border: 1px solid #0F1C53;
-}
-
-video {
-  width: 100%;
-  object-fit: fill;
+  background-color: #ffde00;
+  border: 1px solid #806f00;
 }

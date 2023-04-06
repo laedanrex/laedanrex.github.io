@@ -11,6 +11,7 @@ export default function TextPlayer(props: Props) {
 
   return (
     <div className="TextPlayer">
+      TEXTS
     </div>
   );
 }

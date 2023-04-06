@@ -11,7 +11,7 @@ export default function ImagePlayer(props: Props) {
 
   return (
     <div className="ImagePlayer">
-      <img src="" alt="pouet" />
+      <img src="" alt="pouSet" />
     </div>
   );
 }

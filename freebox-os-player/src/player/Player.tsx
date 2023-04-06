@@ -30,7 +30,7 @@ export default function Player(props: Props) {
   }
 
   function getUrl(): string | undefined {
-    location.pathname;
+    console.log(location.pathname);
     return '';
   }
 
